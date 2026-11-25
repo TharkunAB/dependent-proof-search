@@ -1,0 +1,59 @@
+cabal-version: 3.4
+name: dependent-proof-search
+version: 0.1.0.0
+synopsis: Bounded proof-search hole-fit plugin for Dependent Haskell
+description:
+  @dependent-proof-search@ provides a GHC hole-fit plugin
+  ('Dependent.Plugin.ProofSearch') for bounded backward-chaining proof
+  synthesis and congruence/transitivity subgoal refinement in Dependent
+  Haskell (@-XDependentTypes@).
+
+  The plugin inspects in-scope local bindings, GADT data constructors,
+  @foreach@ lemmas, and polymorphic equality combinators purely from their
+  types, pre-normalizes open family redexes, checks every candidate against
+  GHC's constraint solver without mutating unification state, and renders
+  fits with unrenamed source binder names.
+
+homepage: https://github.com/TharkunAB/dependent-proof-search
+bug-reports: https://github.com/TharkunAB/dependent-proof-search/issues
+license: BSD-3-Clause
+license-file: LICENSE
+author: Matthias Pall Gissurarson
+maintainer: mpg@mpg.is
+copyright: 2026 Tharkun AB and Matthias Pall Gissurarson
+category: Dependent Types, Compiler Plugins, Theorem Provers
+build-type: Simple
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+
+source-repository head
+  type: git
+  location: https://github.com/TharkunAB/dependent-proof-search.git
+
+common warnings
+  ghc-options: -Wall
+  default-language: GHC2024
+
+library
+  import: warnings
+  hs-source-dirs: src
+  exposed-modules:
+    Dependent.Plugin.ProofSearch
+
+  build-depends:
+    base >=4.20 && <5,
+    containers >=0.6 && <0.9,
+    ghc >=10.1 && <10.3,
+
+test-suite dependent-proof-search-test
+  import: warnings
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Main.hs
+  build-depends:
+    base,
+    dependent-proof-search,
+    directory,
+    filepath,
+    process,
